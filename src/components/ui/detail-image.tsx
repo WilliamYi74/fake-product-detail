@@ -12,7 +12,7 @@ type DetailImageProps = {
 const ImgaeWrapper = styled.div``
 export const Image = styled(NextImage)<{ $height?: string | number }>`
   display: block;
-  width: 100vw;
+  width: 100%;
   height: ${(props) => props.$height || 'auto'};
 `
 const DetailImage = (props: DetailImageProps) => {

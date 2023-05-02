@@ -15,11 +15,9 @@ import detailImg6 from '../assets/images/承接页2_06.jpg'
 import DetailImage, { Image } from '@/components/ui/detail-image'
 import { NextPageWithLayout, registerLayout } from './_app'
 const Main = styled.main`
-  width: 100vw;
+  width: 100%;
 `
-const Swiper = styled(ASwiper)`
-  --height: 66.667vh;
-`
+const Swiper = styled(ASwiper)``
 const images = [img1, img2, img3, img4, img5]
 const Index: NextPageWithLayout<{}> = () => {
   return (
@@ -41,16 +39,11 @@ const Index: NextPageWithLayout<{}> = () => {
         >
           {images.map((src, idx) => (
             <Swiper.Item key={idx}>
-              <Image
-                priority={[0, 4].includes(idx)}
-                $height="66.667vh"
-                src={src}
-                alt="轮播图"
-              />
+              <Image priority={[0, 4].includes(idx)} src={src} alt="轮播图" />
             </Swiper.Item>
           ))}
         </Swiper>
-        <DetailImage src={daojishiGif} alt="活动倒计时" $height="18.533vw" />
+        <DetailImage src={daojishiGif} alt="活动倒计时" />
         <DetailImage src={detailImg1} alt="承接页1" priority />
         <DetailImage src={detailImg2} alt="承接页2" priority />
         <DetailImage src={detailImg3} alt="承接页3" priority />

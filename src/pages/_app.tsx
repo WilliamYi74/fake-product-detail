@@ -1,7 +1,7 @@
 import type { AppProps } from 'next/app'
 import { ThemeProvider, DefaultTheme } from 'styled-components'
 import GlobalStyle from '../components/common/global-styles'
-import Layout from '@/components/layout/layout'
+import Layout from '@/components/layout'
 import { ReactElement, ReactNode } from 'react'
 import { NextPage } from 'next'
 // App的props类型
