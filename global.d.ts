@@ -1,10 +1,11 @@
-import { NextComponentType } from 'next'
+import { StaticImageData } from 'next/image'
 
-// declare module 'react' {
-//   interface FunctionComponent {
-//     getLayout?: (page: ReactElement) => page
-//   }
-//   interface ComponentClass {
-//     getLayout?: (page: ReactElement) => page
-//   }
-// }
+export type ImageModuleType = {
+  id: number
+  alt: string
+  src: string | StaticImageData
+}
+interface StaticRequire {
+  default: StaticImageData
+}
+export type StaticImport = StaticRequire | StaticImageData

@@ -1,19 +1,17 @@
 import styled from 'styled-components'
-import NextImage, { StaticImageData } from 'next/image'
-interface StaticRequire {
-  default: StaticImageData
-}
+import NextImage from 'next/image'
+import { StaticImport } from 'global'
 type DetailImageProps = {
-  src: string | StaticRequire | StaticImageData
+  src: string | StaticImport
   alt: string
-  $height?: string | number
   priority?: boolean
+  onClick?: () => void
 }
 const ImgaeWrapper = styled.div``
-export const Image = styled(NextImage)<{ $height?: string | number }>`
+export const Image = styled(NextImage)`
   display: block;
   width: 100%;
-  height: ${(props) => props.$height || 'auto'};
+  height: auto;
 `
 const DetailImage = (props: DetailImageProps) => {
   return (

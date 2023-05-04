@@ -1,25 +1,28 @@
 import styled from 'styled-components'
 import { Swiper as ASwiper } from 'antd-mobile'
-import img1 from '../assets/images/1.jpg'
-import img2 from '../assets/images/2.jpg'
-import img3 from '../assets/images/3.jpg'
-import img4 from '../assets/images/4.jpg'
-import img5 from '../assets/images/5.jpg'
 import daojishiGif from '../assets/images/daojishi.gif'
-import detailImg1 from '../assets/images/承接页2_01.3.jpg'
-import detailImg2 from '../assets/images/承接页2_02.jpg'
-import detailImg3 from '../assets/images/承接页2_03.jpg'
-import detailImg4 from '../assets/images/承接页2_04.jpg'
-import detailImg5 from '../assets/images/承接页2_05.jpg'
-import detailImg6 from '../assets/images/承接页2_06.jpg'
 import DetailImage, { Image } from '@/components/ui/detail-image'
 import { NextPageWithLayout, registerLayout } from './_app'
+import { ImageModuleType, StaticRequire } from 'global'
+import { useRouter } from 'next/router'
+import { readdir } from 'fs/promises'
+import { join } from 'path'
+import { cwd } from 'process'
+type IndexProps = {
+  details: ImageModuleType[]
+  swiperImgs: ImageModuleType[]
+}
 const Main = styled.main`
   width: 100%;
 `
 const Swiper = styled(ASwiper)``
-const images = [img1, img2, img3, img4, img5]
-const Index: NextPageWithLayout<{}> = () => {
+const Index: NextPageWithLayout<IndexProps> = ({ details, swiperImgs }) => {
+  const router = useRouter()
+  const onNavigateComments = (e: ImageModuleType) => {
+    if (e.id === 1) {
+      router.push('/comments')
+    }
+  }
   return (
     <>
       <Main>
@@ -37,22 +40,47 @@ const Index: NextPageWithLayout<{}> = () => {
             },
           }}
         >
-          {images.map((src, idx) => (
-            <Swiper.Item key={idx}>
-              <Image priority={[0, 4].includes(idx)} src={src} alt="轮播图" />
+          {swiperImgs.map((e, idx) => (
+            <Swiper.Item key={e.id}>
+              <Image priority={[0, 4].includes(idx)} src={e.src} alt={e.alt} />
             </Swiper.Item>
           ))}
         </Swiper>
         <DetailImage src={daojishiGif} alt="活动倒计时" />
-        <DetailImage src={detailImg1} alt="承接页1" priority />
-        <DetailImage src={detailImg2} alt="承接页2" priority />
-        <DetailImage src={detailImg3} alt="承接页3" priority />
-        <DetailImage src={detailImg4} alt="承接页4" priority />
-        <DetailImage src={detailImg5} alt="承接页5" priority />
-        <DetailImage src={detailImg6} alt="承接页6" priority />
+        {details.map((e) => (
+          <DetailImage
+            key={e.id}
+            src={e.src}
+            alt={e.alt}
+            priority
+            onClick={() => onNavigateComments(e)}
+          />
+        ))}
       </Main>
     </>
   )
+}
+export async function getStaticProps() {
+  const getImportImgs = async (pattern: RegExp, altText: string) => {
+    const files = (
+      await readdir(join(cwd(), 'src', 'assets', 'images'))
+    ).filter((e) => e.match(pattern))
+    return await Promise.all(
+      files.map(async (e, idx) => {
+        const importedModule = (await import(
+          `@/assets/images/${e}`
+        )) as StaticRequire
+        return {
+          id: idx + 1,
+          alt: `${altText}${idx + 1}`,
+          src: importedModule.default,
+        }
+      })
+    )
+  }
+  const swiperImgs = await getImportImgs(/^[1-5]\.jpg$/, '轮播图')
+  const details = await getImportImgs(/^承接页2_0[1-6]\.jpg$/, '承接页')
+  return { props: { swiperImgs, details } }
 }
 registerLayout(Index)
 export default Index
