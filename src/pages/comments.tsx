@@ -1,6 +1,6 @@
 import DetailImage from '@/components/ui/detail-image'
 import styled from 'styled-components'
-import { NextPageWithLayout } from './_app'
+import { NextPageWithLayout, registerLayout } from './_app'
 import { ImageModuleType, StaticRequire } from 'global'
 import { cwd } from 'process'
 import { join } from 'path'
@@ -46,4 +46,5 @@ export async function getStaticProps() {
     },
   }
 }
+registerLayout(Comments)
 export default Comments
